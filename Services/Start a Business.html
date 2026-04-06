@@ -7,8 +7,19 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../style.css">
 
 <style>
+
+/* ===== ROOT VARIABLES (ADDED) ===== */
+:root {
+  --orange: #F57C20;
+  --teal: #1E8C8F;
+  --white: #FFFFFF;
+
+  --shadow-light: rgba(0,0,0,0.08);
+  --shadow-medium: rgba(0,0,0,0.18);
+}
 
 /* ===== GLOBAL ===== */
 body {
@@ -30,41 +41,7 @@ body::before, body::after {
   animation: float 8s infinite alternate ease-in-out;
 }
 
-body::before {
-  background: #F57C20;
-  top: -100px;
-  left: -100px;
-}
 
-body::after {
-  background: #1E8C8F;
-  bottom: -100px;
-  right: -100px;
-}
-
-@keyframes float {
-  from { transform: translateY(0px); }
-  to { transform: translateY(40px); }
-}
-
-/* ===== NAVBAR ===== */
-.navbar {
-  position: sticky;
-  top: 0;
-  backdrop-filter: blur(10px);
-  background: rgba(255,255,255,0.7);
-  padding: 15px 30px;
-  display: flex;
-  justify-content: space-between;
-}
-
-.logo {
-  font-weight: 700;
-  font-size: 20px;
-  background: linear-gradient(90deg,#F57C20,#1E8C8F);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
 
 /* ===== HEADER ===== */
 .header {
@@ -75,7 +52,7 @@ body::after {
 .header h1 {
   font-size: 40px;
   font-weight: 700;
-  background: linear-gradient(90deg,#F57C20,#1E8C8F);
+  background: linear-gradient(90deg,var(--orange),var(--teal)); /* updated */
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -103,7 +80,7 @@ body::after {
   padding: 25px;
   text-align: center;
   transition: all 0.4s ease;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  box-shadow: 0 10px 25px var(--shadow-light); /* updated */
   overflow: hidden;
   animation: fadeUp 0.8s ease forwards;
 }
@@ -116,7 +93,7 @@ body::after {
   left: 0;
   height: 5px;
   width: 100%;
-  background: linear-gradient(90deg,#F57C20,#1E8C8F);
+  background: linear-gradient(90deg,var(--orange),var(--teal)); /* updated */
 }
 
 /* LIGHT EFFECT */
@@ -127,12 +104,12 @@ body::after {
   background: radial-gradient(circle at var(--x,50%) var(--y,50%), rgba(255,255,255,0.4), transparent 60%);
   opacity: 0;
   transition: 0.3s;
-  pointer-events: none; /* <- Add this line */
+  pointer-events: none;
 }
 
 .service-card:hover {
   transform: translateY(-12px) scale(1.03);
-  box-shadow: 0 20px 45px rgba(0,0,0,0.18);
+  box-shadow: 0 20px 45px var(--shadow-medium); /* updated */
 }
 
 .service-card:hover::after {
@@ -142,7 +119,7 @@ body::after {
 /* ===== ICON ===== */
 .icon i {
   font-size: 36px;
-  background: linear-gradient(90deg,#F57C20,#1E8C8F);
+  background: linear-gradient(90deg,var(--orange),var(--teal)); /* updated */
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   transition: 0.3s;
@@ -169,17 +146,17 @@ body::after {
   padding: 10px 22px;
   border-radius: 30px;
   border: none;
-  color: white;
+  color: var(--white); /* updated */
   font-weight: 500;
   font-size: 14px;
-  background: linear-gradient(90deg,#F57C20,#1E8C8F);
+  background: linear-gradient(90deg,var(--orange),var(--teal)); /* updated */
   transition: all 0.3s ease;
-  cursor: pointer; /* make clickable */
+  cursor: pointer;
 }
 
 .service-card button:hover {
   transform: scale(1.08);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  box-shadow: 0 8px 20px var(--shadow-medium); /* updated */
 }
 
 /* ===== ANIMATION ===== */
@@ -194,11 +171,10 @@ body::after {
   }
 }
 
-/* ===== FOOTER ===== */
-.footer {
-  text-align: center;
-  padding: 20px;
-  color: #777;
+/* ===== ANIMATED BG KEYFRAME (kept intact, just placed properly) */
+@keyframes float {
+  from { transform: translateY(0px); }
+  to { transform: translateY(40px); }
 }
 
 </style>
@@ -206,9 +182,7 @@ body::after {
 
 <body>
 
-<div class="navbar">
-  <div class="logo">KanoonPath</div>
-</div>
+ <div id="header"></div>
 
 <div class="header">
   <h1>Start Your Business</h1>
@@ -261,9 +235,7 @@ body::after {
 
 </div>
 
-<div class="footer">
-  © 2026 KanoonPath • Legal Filing Made Simple
-</div>
+<div id="footer"></div>
 
 <!-- ===== INTERACTIVE GLOW SCRIPT ===== -->
 <script>
@@ -274,6 +246,33 @@ document.querySelectorAll('.service-card').forEach(card => {
     card.style.setProperty('--y', `${e.clientY - rect.top}px`);
   });
 });
+
+window.addEventListener("DOMContentLoaded", () => {
+
+      Promise.all([
+        fetch("../header.html").then(res => res.text()),
+        fetch("../footer.html").then(res => res.text())
+      ])
+        .then(([header, footer]) => {
+
+          // Insert Header & Footer
+          document.getElementById("header").innerHTML = header;
+          document.getElementById("footer").innerHTML = footer;
+
+          // ✅ Attach menu button AFTER header loads
+          const menuBtn = document.querySelector(".menu-btn");
+          const navLinks = document.querySelector(".nav-links");
+
+          if (menuBtn && navLinks) {
+            menuBtn.addEventListener("click", () => {
+              navLinks.classList.toggle("show");
+            });
+          }
+
+        })
+        .catch(error => console.error("Error loading header/footer:", error));
+
+    });
 </script>
 
 </body>
