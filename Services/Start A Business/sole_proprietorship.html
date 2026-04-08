@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sole Proprietorship Registration</title>
-<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="../../style.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
@@ -389,27 +389,33 @@ ul {
  window.addEventListener("DOMContentLoaded", () => {
 
   Promise.all([
-    fetch("../header.html").then(res => res.text()),
-    fetch("../footer.html").then(res => res.text())
+    fetch("../../header.html").then(res => res.text()),
+    fetch("../../footer.html").then(res => res.text())
   ])
-  .then(([header, footer]) => {
+    .then(([header, footer]) => {
 
-    // Insert Header & Footer
-    document.getElementById("header").innerHTML = header;
-    document.getElementById("footer").innerHTML = footer;
+      // ✅ FIX: adjust image paths dynamically
+      const basePath = location.pathname.includes("Services") ? "../" : "";
 
-    // Attach menu button AFTER header loads
-    const menuBtn = document.querySelector(".menu-btn");
-    const navLinks = document.querySelector(".nav-links");
+      const fixedHeader = header.replace(/src="images\//g, `src="${basePath}images/`);
+      const fixedFooter = footer.replace(/src="images\//g, `src="${basePath}images/`);
 
-    if (menuBtn && navLinks) {
-      menuBtn.addEventListener("click", () => {
-        navLinks.classList.toggle("show");
-      });
-    }
+      // Insert Header & Footer
+      document.getElementById("header").innerHTML = fixedHeader;
+      document.getElementById("footer").innerHTML = fixedFooter;
 
-  })
-  .catch(error => console.error("Error loading header/footer:", error));
+      // ✅ Attach menu button AFTER header loads
+      const menuBtn = document.querySelector(".menu-btn");
+      const navLinks = document.querySelector(".nav-links");
+
+      if (menuBtn && navLinks) {
+        menuBtn.addEventListener("click", () => {
+          navLinks.classList.toggle("show");
+        });
+      }
+
+    })
+    .catch(error => console.error("Error loading header/footer:", error));
 
 });
 const acc = document.querySelectorAll(".accordion");
